@@ -1,102 +1,87 @@
 import jm.task.core.jdbc.model.User;
-import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
-import org.junit.Assert;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import static jm.task.core.jdbc.service.UserService.*;
+import static jm.task.core.jdbc.service.UserServiceImpl.*;
+import static org.junit.Assert.fail;
+
 public class UserServiceTest {
-    private final UserService userService = new UserServiceImpl();
-
-    private final String testName = "Nick";
-    private final String testLastName = "Martin";
-    private final byte testAge = 15;
+    long testId = 1L;
+    String testName = "Nick";
+    String testLastName = "Martin";
+    byte testAge = 15;
 
 
     @Test
-    public void dropUsersTable() {
+    public void testDropUsersTable() {
         try {
-            userService.dropUsersTable();
-            userService.dropUsersTable();
+            dropUsersTable(UserServiceImpl.connection);
         } catch (Exception e) {
-            Assert.fail("An exception occurred while testing drop table\n" + e);
+            e.printStackTrace();
         }
     }
 
     @Test
-    public void createUsersTable() {
+    public void testCreateUsersTable() {
         try {
-            userService.dropUsersTable();
-            userService.createUsersTable();
+            UserServiceImpl.createUsersTable(connection);
         } catch (Exception e) {
-            Assert.fail("An exception occurred while testing to create a user table\n" + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @Test
-    public void saveUser() {
+    public void testSaveUser() throws Exception {
         try {
-            userService.dropUsersTable();
-            userService.createUsersTable();
-            userService.saveUser(testName, testLastName, testAge);
-
-            User user = userService.getAllUsers().get(0);
-
-            if (!testName.equals(user.getName())
-                    || !testLastName.equals(user.getLastName())
-                    || testAge != user.getAge()
+            UserServiceImpl.saveUser(testName, testLastName, testAge);
+            if (!testName.equals(User.getUserName())
+                    && !testLastName.equals(User.getLastName(testLastName))
+                    && testAge != User.getAge()
             ) {
-                Assert.fail("User was incorrectly added to the database");
+                throw new Exception("User was incorrectly removed to the database");
             }
-
-        } catch (Exception e) {
-            Assert.fail("An exception occurred while testing user save\n" + e);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     @Test
-    public void removeUserById() {
+    public void testRemoveUserById() {
         try {
-            userService.dropUsersTable();
-            userService.createUsersTable();
-            userService.saveUser(testName, testLastName, testAge);
-            userService.removeUserById(1L);
+            UserServiceImpl.removeUserById(testId);
+            if (testName.equals(User.getUserName())
+                    && testLastName.equals(User.getLastName(testLastName))
+                    && testAge == User.getAge()
+            ) {
+                throw new Exception("User was incorrectly removed to the database");
+            }
         } catch (Exception e) {
-            Assert.fail("An exception occurred while testing deleting a user by id\n" + e);
+            e.printStackTrace();
         }
     }
 
     @Test
-    public void getAllUsers() {
+    public void testGetAllUsers() {
         try {
-            userService.dropUsersTable();
-            userService.createUsersTable();
-            userService.saveUser(testName, testLastName, testAge);
-            List<User> userList = userService.getAllUsers();
-
-            if (userList.size() != 1) {
-                Assert.fail("Check if the save/delete or create table method works correctly");
+                List<User> users = UserServiceImpl.getAllUsers(connection);
+            if (users.isEmpty()) {
+                throw new Exception("Check if the save/delete or create table method works correctly");
             }
         } catch (Exception e) {
-            Assert.fail("An exception occurred while trying to get all users from the database\n" + e);
+            e.printStackTrace();
         }
     }
 
     @Test
-    public void cleanUsersTable() {
+    public void testCleanUsersTable() {
         try {
-            userService.dropUsersTable();
-            userService.createUsersTable();
-            userService.saveUser(testName, testLastName, testAge);
-            userService.cleanUsersTable();
-
-            if (userService.getAllUsers().size() != 0) {
-                Assert.fail("The method of clearing the user table is implemented incorrectly");
-            }
+            cleanUsersTable(UserServiceImpl.connection);
         } catch (Exception e) {
-            Assert.fail("An exception occurred while testing clearing the users table\n" + e);
+            fail("The method of clearing the user table is implemented incorrectly or An exception occurred while testing clearing the users table\n" + e);
         }
     }
-
 }

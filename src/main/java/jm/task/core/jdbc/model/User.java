@@ -3,60 +3,67 @@ package jm.task.core.jdbc.model;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table
 public class User {
     @Id
-    private Long id;
+    private static Long id;
 
     @Column
-    private String name;
+    private static String name;
 
     @Column
-    private String lastName;
+    private static String lastName;
 
     @Column
-    private Byte age;
+    private static Byte age;
 
+    public static List<User> users = new ArrayList<>();
     public User() {
 
     }
 
     public User(String name, String lastName, Byte age) {
-        this.name = name;
-        this.lastName = lastName;
-        this.age = age;
+        User.name = name;
+        User.lastName = lastName;
+        User.age = age;
     }
 
-    public Long getId() {
-        return id;
+    public static Long getId(long id) {
+        return User.id;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        User.id = id;
     }
 
-    public String getName() {
+    public static String getUserName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String name) {
+        User.name = name;
     }
 
-    public String getLastName() {
+    public static String getLastName(String lastName) {
         return lastName;
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        User.lastName = lastName;
     }
 
-    public Byte getAge() {
+    public static Byte getAge() {
         return age;
     }
 
     public void setAge(Byte age) {
-        this.age = age;
+        User.age = age;
+    }
+
+    public static List<User> getAllUsers() {
+        return users;
     }
 }
