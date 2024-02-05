@@ -1,12 +1,19 @@
 package jm.task.core.jdbc.service;
+
 import jm.task.core.jdbc.model.User;
+import net.bytebuddy.agent.builder.AgentBuilder;
+import org.testng.annotations.Ignore;
+import org.testng.internal.annotations.IgnoreListener;
+
+import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.*;
 import java.util.List;
+
 import static jm.task.core.jdbc.model.User.users;
 
 public abstract class UserServiceImpl implements UserService {
 
-    public static Connection connection;
+    private static final Connection connection;
 
     static {
         try {
@@ -16,19 +23,21 @@ public abstract class UserServiceImpl implements UserService {
         }
     }
 
-    protected UserServiceImpl(Connection connection) {
-        UserServiceImpl.connection = connection;
-    }
+    ;
 
     public static void createUsersTable(Connection connection) {
-        try (Statement statement = connection.createStatement()) {
+        try {
+            Statement statement = connection.createStatement();
             String createTableSQL = "CREATE TABLE IF NOT EXISTS users (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY," +
                     "name VARCHAR(255) NOT NULL," + "lastname VARCHAR(255) NOT NULL," + "age INT NOT NULL)";
+
             statement.executeUpdate(createTableSQL);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
+
+
         System.out.println("Table 'users' created successfully.");
     }
 
@@ -42,11 +51,13 @@ public abstract class UserServiceImpl implements UserService {
     }
 
     public static void saveUser(String name, String lastName, int age) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (name, lastname, age) VALUES(?,?,?)");
-        preparedStatement.setString(1, name);
-        preparedStatement.setString(2, lastName);
-        preparedStatement.setInt(3, age);
-        int rowsAffected = preparedStatement.executeUpdate();
+        int rowsAffected;
+        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (name, lastname, age) VALUES(?,?,?)")) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setInt(3, age);
+            rowsAffected = preparedStatement.executeUpdate();
+        }
         if (rowsAffected > 0) {
             System.out.println("User saved to database: " + name + " " + lastName);
         }

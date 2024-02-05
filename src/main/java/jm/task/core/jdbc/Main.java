@@ -1,15 +1,17 @@
 package jm.task.core.jdbc;
+
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserServiceImpl;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
-
-import static jm.task.core.jdbc.service.UserService.removeUserById;
 import static jm.task.core.jdbc.service.UserServiceImpl.*;
 
 public class Main {
     public static void main(String[] args) {
         try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/example_schema", "root", "2522678tkdtmv");
             UserServiceImpl.createUsersTable(connection);
 
             saveUser("John", "Braun", 34);

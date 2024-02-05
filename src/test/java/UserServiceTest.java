@@ -2,10 +2,11 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserServiceImpl;
 import org.junit.Test;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
-import static jm.task.core.jdbc.service.UserService.*;
 import static jm.task.core.jdbc.service.UserServiceImpl.*;
 import static org.junit.Assert.fail;
 
@@ -15,11 +16,15 @@ public class UserServiceTest {
     String testLastName = "Martin";
     byte testAge = 15;
 
+    Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/example_schema", "root", "2522678tkdtmv");
+
+    public UserServiceTest() throws SQLException {
+    }
 
     @Test
     public void testDropUsersTable() {
         try {
-            dropUsersTable(UserServiceImpl.connection);
+            dropUsersTable(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,7 +84,7 @@ public class UserServiceTest {
     @Test
     public void testCleanUsersTable() {
         try {
-            cleanUsersTable(UserServiceImpl.connection);
+            cleanUsersTable(connection);
         } catch (Exception e) {
             fail("The method of clearing the user table is implemented incorrectly or An exception occurred while testing clearing the users table\n" + e);
         }

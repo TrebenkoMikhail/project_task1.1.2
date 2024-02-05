@@ -2,12 +2,15 @@ package jm.task.core.jdbc.service;
 
 import jm.task.core.jdbc.model.User;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
 import static jm.task.core.jdbc.model.User.users;
 
 public interface UserService {
+
     static void createUsersTable() {
 
     }
