@@ -1,66 +1,81 @@
 package jm.task.core.jdbc.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table
+@Entity
+@Table(name = "users")
 public class User {
     @Id
-    private static Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    @Column
-    private static String name;
+    @Column(name = "name")
+    private String name;
 
-    @Column
-    private static String lastName;
+    @Column(name = "lastname")
+    private String lastName;
 
-    @Column
-    private static Byte age;
+    @Column(name = "age")
+    private Byte age;
 
     public static List<User> users = new ArrayList<>();
-    public User() {
 
+    public User() {
     }
 
     public User(String name, String lastName, Byte age) {
-        User.name = name;
-        User.lastName = lastName;
-        User.age = age;
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
     }
 
-    public static Long getId(long id) {
-        return User.id;
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
-        User.id = id;
+        this.id = id;
     }
 
-    public static String getUserName() {
+    public String getUserName() {
         return name;
     }
 
     public void setUserName(String name) {
-        User.name = name;
+        this.name = name;
     }
 
-    public static String getLastName(String lastName) {
+    public String getLastName() {
         return lastName;
     }
 
     public void setLastName(String lastName) {
-        User.lastName = lastName;
+        this.lastName = lastName;
     }
 
-    public static Byte getAge() {
+    public Byte getAge() {
         return age;
     }
 
     public void setAge(Byte age) {
-        User.age = age;
+        this.age = age;
+    }
+
+
+    public static void addUser(User user) {
+        users.add(user);
+    }
+
+    public static void removeUser(User user) {
+        users.remove(user);
     }
 
     public static List<User> getAllUsers() {

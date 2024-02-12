@@ -1,15 +1,11 @@
 package jm.task.core.jdbc.service;
-
 import jm.task.core.jdbc.model.User;
-import net.bytebuddy.agent.builder.AgentBuilder;
-import org.testng.annotations.Ignore;
-import org.testng.internal.annotations.IgnoreListener;
-
-import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static jm.task.core.jdbc.model.User.users;
+
 
 public abstract class UserServiceImpl implements UserService {
 
@@ -23,9 +19,10 @@ public abstract class UserServiceImpl implements UserService {
         }
     }
 
-    ;
 
-    public static void createUsersTable(Connection connection) {
+
+    @Override
+    public void createUsersTable() {
         try {
             Statement statement = connection.createStatement();
             String createTableSQL = "CREATE TABLE IF NOT EXISTS users (" +
@@ -36,12 +33,27 @@ public abstract class UserServiceImpl implements UserService {
         } catch (SQLException e) {
             throw new RuntimeException();
         }
-
-
         System.out.println("Table 'users' created successfully.");
     }
 
-    public static void dropUsersTable(Connection connection) throws SQLException {
+    @Override
+    public void saveUser(String name, String lastName, byte age) {
+        int rowsAffected;
+        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (name, lastname, age) VALUES(?,?,?)")) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setByte(3, age);
+            rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("User saved to database: " + name + " " + lastName);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error saving user: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void dropUsersTable() {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("DROP TABLE IF EXISTS users");
             System.out.println("Table 'users' dropped successfully.");
@@ -50,20 +62,8 @@ public abstract class UserServiceImpl implements UserService {
         }
     }
 
-    public static void saveUser(String name, String lastName, int age) throws SQLException {
-        int rowsAffected;
-        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (name, lastname, age) VALUES(?,?,?)")) {
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, lastName);
-            preparedStatement.setInt(3, age);
-            rowsAffected = preparedStatement.executeUpdate();
-        }
-        if (rowsAffected > 0) {
-            System.out.println("User saved to database: " + name + " " + lastName);
-        }
-    }
-
-    public static void removeUserById(long id) {
+    @Override
+    public void removeUserById(long id) {
         try (PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users WHERE id = ?")) {
             preparedStatement.setLong(1, id);
             int rowAffected = preparedStatement.executeUpdate();
@@ -77,7 +77,19 @@ public abstract class UserServiceImpl implements UserService {
         }
     }
 
-    public static List<User> getAllUsers(Connection connection) throws SQLException{
+    @Override
+    public void cleanUsersTable() throws SQLException {
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate("DELETE FROM users");
+            System.out.println("Table 'users' cleaned successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static List<User> getAllUsers(Connection connection) {
+        List<User> users = new ArrayList<>();
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT * FROM users")) {
             while (resultSet.next()) {
@@ -93,14 +105,5 @@ public abstract class UserServiceImpl implements UserService {
         System.out.println("Getting all users from database");
         users.forEach(System.out::println);
         return users;
-    }
-
-    public static void cleanUsersTable(Connection connection) {
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("DELETE FROM users");
-            System.out.println("Table 'users' cleaned successfully.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
