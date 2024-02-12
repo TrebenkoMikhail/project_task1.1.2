@@ -5,7 +5,6 @@ import jm.task.core.jdbc.model.User;
 import java.sql.SQLException;
 import java.util.List;
 
-import static jm.task.core.jdbc.model.User.users;
 
 public class UserDaoJDBCImpl implements UserDao {
     public UserDaoJDBCImpl() {
@@ -16,7 +15,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     }
 
-    public void dropUsersTable() throws SQLException{
+    public void dropUsersTable() {
 
     }
 
@@ -29,7 +28,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public List<User> getAllUsers() throws SQLException{
-        return users;
+        return User.getAllUsers();
     }
 
     public void cleanUsersTable() {

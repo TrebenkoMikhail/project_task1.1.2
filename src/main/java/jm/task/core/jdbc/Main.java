@@ -1,31 +1,27 @@
 package jm.task.core.jdbc;
 
 import jm.task.core.jdbc.model.User;
-import jm.task.core.jdbc.service.UserServiceImpl;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import jm.task.core.jdbc.service.UserDaoHibernateImpl;
+
 import java.util.List;
-import static jm.task.core.jdbc.service.UserServiceImpl.*;
 
 public class Main {
     public static void main(String[] args) {
-        try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/example_schema", "root", "2522678tkdtmv");
-            UserServiceImpl.createUsersTable(connection);
 
-            saveUser("John", "Braun", 34);
-            saveUser("Alice", "Catcher",  25);
-            saveUser("Bob", "Macquensly", 28);
-            saveUser("Eve", "Apple",  18);
+        UserDaoHibernateImpl.createUsersTable();
+        UserDaoHibernateImpl.saveUser("John", "Wick", (byte) 34);
+        UserDaoHibernateImpl.saveUser("Neo", "Matrix", (byte) 33);
+        UserDaoHibernateImpl.saveUser("Tony", "Jha", (byte) 24);
+        UserDaoHibernateImpl.saveUser("Jacky", "Chan", (byte) 48);
 
-            List<User> users = getAllUsers(connection);
-            users.forEach(System.out::println);
-            UserServiceImpl.removeUserById(2);
-            UserServiceImpl.cleanUsersTable(connection);
-            dropUsersTable(connection);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        System.out.println("The List of All users: ");
+
+        List<User> users = UserDaoHibernateImpl.getAllUsers();
+        assert users != null;
+        users.forEach(System.out::println);
+        UserDaoHibernateImpl.removeUserById(3);
+        UserDaoHibernateImpl.cleanUsersTable();
+        UserDaoHibernateImpl.dropUsersTable();
+
     }
 }

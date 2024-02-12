@@ -21,8 +21,7 @@
     </build>
 
     <dependencies>
-<!--         Your dependencies-->
-         <!-- https://mvnrepository.com/artifact/junit/junit -->
+
          <dependency>
              <groupId>junit</groupId>
              <artifactId>junit</artifactId>
@@ -54,10 +53,19 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.7.0</version>
-            <scope>compile</scope>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>9.0.70</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala3-library_3</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>10.1.5</version>
         </dependency>
     </dependencies>
 
