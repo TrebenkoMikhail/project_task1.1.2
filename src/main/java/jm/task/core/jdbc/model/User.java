@@ -21,7 +21,7 @@ public class User {
     private String name;
 
     @Column(name = "lastname")
-    private String lastName;
+    private String lastname;
 
     @Column(name = "age")
     private Byte age;
@@ -31,10 +31,10 @@ public class User {
     public User() {
     }
 
-    public User(String name, String lastName, Byte age) {
+    public User(String name, String lastname, int age) {
         this.name = name;
-        this.lastName = lastName;
-        this.age = age;
+        this.lastname = lastname;
+        this.age = (byte) age;
     }
 
     public Long getId() {
@@ -45,7 +45,7 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
+    public String getName() {
         return name;
     }
 
@@ -53,12 +53,12 @@ public class User {
         this.name = name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public Byte getAge() {
@@ -70,15 +70,21 @@ public class User {
     }
 
 
-    public static void addUser(User user) {
+    public void addUser(User user) {
         users.add(user);
     }
 
-    public static void removeUser(User user) {
+    public void removeUser(User user) {
         users.remove(user);
     }
 
-    public static List<User> getAllUsers() {
-        return users;
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastname + '\'' +
+                ", age=" + age +
+                '}';
     }
 }

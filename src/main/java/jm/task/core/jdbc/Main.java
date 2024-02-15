@@ -1,27 +1,30 @@
 package jm.task.core.jdbc;
 
 import jm.task.core.jdbc.model.User;
-import jm.task.core.jdbc.service.UserDaoHibernateImpl;
+import jm.task.core.jdbc.service.UserServiceHibernateImpl;
 
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        UserServiceHibernateImpl userService = new UserServiceHibernateImpl();
 
-        UserDaoHibernateImpl.createUsersTable();
-        UserDaoHibernateImpl.saveUser("John", "Wick", (byte) 34);
-        UserDaoHibernateImpl.saveUser("Neo", "Matrix", (byte) 33);
-        UserDaoHibernateImpl.saveUser("Tony", "Jha", (byte) 24);
-        UserDaoHibernateImpl.saveUser("Jacky", "Chan", (byte) 48);
+        userService.createUsersTable();
+        userService.saveUser("John", "Wick", (byte) 34);
+        userService.saveUser("Neo", "Matrix", (byte) 33);
+        userService.saveUser("Tony", "Jha", (byte) 24);
+        userService.saveUser("Jacky", "Chan", (byte) 48);
 
         System.out.println("The List of All users: ");
 
-        List<User> users = UserDaoHibernateImpl.getAllUsers();
+        List<User> users = userService.getAllUsers();
         assert users != null;
-        users.forEach(System.out::println);
-        UserDaoHibernateImpl.removeUserById(3);
-        UserDaoHibernateImpl.cleanUsersTable();
-        UserDaoHibernateImpl.dropUsersTable();
+        for (User user : users) {
+            System.out.println(user.toString());
+        }
+        userService.removeUserById(3);
+        userService.cleanUsersTable();
+        userService.dropUsersTable();
 
     }
 }
