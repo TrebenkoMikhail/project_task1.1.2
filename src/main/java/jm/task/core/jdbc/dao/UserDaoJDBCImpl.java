@@ -2,36 +2,43 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 
-import java.sql.SQLException;
 import java.util.List;
+
+import static jm.task.core.jdbc.model.User.users;
 
 
 public class UserDaoJDBCImpl implements UserDao {
+
     public UserDaoJDBCImpl() {
 
     }
-
+    @Override
     public void createUsersTable() {
 
     }
-
+    @Override
     public void dropUsersTable() {
 
     }
-
-    public void saveUser(String name, String lastName, byte age) throws SQLException{
+    @Override
+    public void saveUser(String name, String lastname, int age) {
 
     }
-
+    @Override
     public void removeUserById(long id) {
 
     }
-
-    public List<User> getAllUsers() throws SQLException{
-        return User.getAllUsers();
+    @Override
+    public List<User> getAllUsers() {
+        return users;
     }
 
     public void cleanUsersTable() {
 
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

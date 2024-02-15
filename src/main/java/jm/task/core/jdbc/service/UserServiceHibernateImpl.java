@@ -5,7 +5,6 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class UserDaoHibernateImpl implements UserDao {
-
-    public static void createUsersTable() {
+public class UserServiceHibernateImpl implements UserDao {
+    @Override
+    public void createUsersTable() {
         try (Session session = Util.sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.createNativeQuery("CREATE TABLE IF NOT EXISTS users (" +
@@ -29,8 +28,8 @@ public class UserDaoHibernateImpl implements UserDao {
             System.err.println("Error creating users table: " + e.getMessage());
         }
     }
-
-    public static void dropUsersTable() {
+    @Override
+    public void dropUsersTable() {
        try (Session session = Util.sessionFactory.openSession()) {
            Transaction transaction = session.beginTransaction();
            session.createSQLQuery("DROP TABLE IF EXISTS users").executeUpdate();
@@ -40,23 +39,23 @@ public class UserDaoHibernateImpl implements UserDao {
            System.err.println("Error dropping users table: " + e.getMessage());
        }
    }
-
-   public static void saveUser(String name, String lastName, byte age) {
+   @Override
+   public void saveUser(String name, String lastname, int age) {
        Transaction transaction = null;
        try (Session session = Util.sessionFactory.openSession()) {
            transaction = session.beginTransaction();
-           User user = new User(name, lastName, age);
+           User user = new User(name, lastname, age);
            session.save(user);
            transaction.commit();
-           System.out.println("User saved to database: " + name + " " + lastName);
+           System.out.println("User saved to database: " + name + " " + lastname);
        } catch (Exception e) {
            if (transaction != null) {
                transaction.rollback();
            }
        }
    }
-
-   public static void removeUserById(long id){
+   @Override
+   public void removeUserById(long id){
        try (Session session = Util.sessionFactory.openSession()) {
            Transaction transaction = session.beginTransaction();
            User user = session.get(User.class, id);
@@ -71,8 +70,8 @@ public class UserDaoHibernateImpl implements UserDao {
            e.printStackTrace();
        }
    }
-
-   public static List<User> getAllUsers() {
+   @Override
+   public List<User> getAllUsers() {
        List<User> users = new ArrayList<>();
        try (Session session = Util.sessionFactory.openSession()) {
            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -87,8 +86,8 @@ public class UserDaoHibernateImpl implements UserDao {
        return users;
    }
 
-
-   public static void cleanUsersTable() {
+   @Override
+   public void cleanUsersTable() {
        Transaction transaction = null;
        try (Session session = Util.sessionFactory.openSession()) {
            transaction = session.beginTransaction();

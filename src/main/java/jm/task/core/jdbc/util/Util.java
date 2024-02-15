@@ -8,10 +8,17 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Environment;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/example_schema", "root", "2522678tkdtmv");
+    }
     public static SessionFactory sessionFactory = buildSessionFactory();
+    private Util(){}
     private static SessionFactory buildSessionFactory() {
         try {
             StandardServiceRegistry standardServiceRegistry = new StandardServiceRegistryBuilder()
