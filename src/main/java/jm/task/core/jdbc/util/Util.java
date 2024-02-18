@@ -14,11 +14,12 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
+
+    public static SessionFactory sessionFactory = buildSessionFactory();
+    private Util(){}
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:mysql://localhost:3306/example_schema", "root", "2522678tkdtmv");
     }
-    public static SessionFactory sessionFactory = buildSessionFactory();
-    private Util(){}
     private static SessionFactory buildSessionFactory() {
         try {
             StandardServiceRegistry standardServiceRegistry = new StandardServiceRegistryBuilder()
