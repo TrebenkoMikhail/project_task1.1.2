@@ -2,12 +2,14 @@ package jm.task.core.jdbc;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.dao.UserDaoHibernateImpl;
+import jm.task.core.jdbc.service.UserService;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
-        UserDaoHibernateImpl userService = new UserDaoHibernateImpl();
+    public static void main(String[] args) throws SQLException {
+        UserService userService = new UserDaoHibernateImpl();
 
         userService.createUsersTable();
         userService.saveUser("John", "Wick", (byte) 34);
